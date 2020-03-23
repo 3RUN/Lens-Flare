@@ -7,6 +7,7 @@ It includes:
 - simple ones from lights
 
 WSAD - movement <br />
+Cursor keys - move the sun <br />
 Hold MRB + mouse - rotate camera <br />
 Click on light bulbs to remove them and their lens flare. <br />
 
