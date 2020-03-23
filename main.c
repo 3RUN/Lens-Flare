@@ -35,6 +35,9 @@ void light_event()
 	
 	if(event_type == EVENT_FRAME)
 	{
+		my->x = my->skill1 + fsin(total_ticks * 8, 64);
+		my->y = my->skill2 + fcos(total_ticks * 8, 64);
+		
 		update_lens_flare(my);
 	}
 }
@@ -49,6 +52,8 @@ action light_bulb()
 	
 	my->emask |= ENABLE_CLICK | ENABLE_FRAME;
 	my->event = light_event;
+	
+	vec_set(&my->skill1, &my->x);
 }
 
 void mouse_lock()
@@ -140,13 +145,16 @@ void main()
 	
 	while(!key_esc)
 	{
-		aforce.pan = -5 * (key_force.x + mouse_right * mouse_force.x + joy_force.x);
-		aforce.tilt = 5 * (key_pgup - key_pgdn + mouse_right * mouse_force.y);
+		sun_angle.pan += 5 * (key_cul - key_cur) * time_step; 
+		sun_angle.tilt += 5 * (key_cuu - key_cud) * time_step; 
+		
+		aforce.pan = -5 * (mouse_right * mouse_force.x);
+		aforce.tilt = 5 * (mouse_right * mouse_force.y);
 		aforce.roll = 0;
 		vec_add(&camera->pan, vec_accelerate(&dist, &aspeed, &aforce, 0.8));
 		
-		force.x = 7 * (key_force.y + key_w - key_s + joy_force.y);
-		force.y = 3 * (key_comma - key_period + key_a - key_d);
+		force.x = 7 * (key_w - key_s);
+		force.y = 3 * (key_a - key_d);
 		force.z = 3 * (key_q - key_e);
 		vec_accelerate(&dist, &speed, &force, 0.5);
 		vec_add(&camera->x, vec_rotate(&dist, &camera->pan));

@@ -32,6 +32,7 @@
 		ENTITY *owner_ent;
 		ENTITY *aura_ent;
 		
+		VECTOR offset;
 		VECTOR world_pos;
 		VECTOR screen_pos;
 		

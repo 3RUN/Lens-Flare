@@ -14,7 +14,8 @@ LIGHT_SOURCE *lens_flare_register(ENTITY *ent, VECTOR *offset_)
 	ent->OBJ_STRUCT = light;
 	ent->OBJ_ID = total_light_sources;
 	
-	vec_set(&light->world_pos, offset_);
+	vec_set(&light->offset, offset_);
+	vec_set(&light->world_pos, &light->offset);
 	vec_rotate(&light->world_pos, &ent->pan);
 	vec_add(&light->world_pos, &ent->x);
 	

@@ -41,7 +41,7 @@ void lens_flare_remove_all(LIGHT_SOURCE *light)
 var lens_flare_trace(VECTOR *pos)
 {
 	var is_visible = true;
-	if(c_trace(pos, &camera->x, TRACE_FLAGS | IGNORE_YOU) > 0)
+	if(c_trace(&camera->x, pos, TRACE_FLAGS | IGNORE_YOU) > 0)
 	{
 		is_visible = false;
 	}
@@ -63,7 +63,7 @@ void is_lens_flare_visible(LIGHT_SOURCE *light)
 	if(light->on_screen == true)
 	{
 		// check if light source is visible from time to time
-		if((total_frames % 20) == true)
+		if((total_frames % 5) == true)
 		{
 			if(lens_flare_trace(&light->world_pos) == true)
 			{
@@ -114,11 +114,17 @@ void update_lens_flare(ENTITY *ent)
 		return;
 	}
 	
+	// update lens flare position
+	vec_set(&light->world_pos, &light->offset);
+	vec_rotate(&light->world_pos, &ent->pan);
+	vec_add(&light->world_pos, &ent->x);
+	
 	// convert world position to screen position
 	vec_set(&light->screen_pos, &light->world_pos);
 	vec_to_screen(&light->screen_pos, camera);
 	
-	// rotate aura to camera
+	// move + rotate aura to camera
+	vec_set(&light->aura_ent->x, &light->world_pos);
 	vec_to_angle(&light->aura_ent->pan, vec_diff(NULL, &light->aura_ent->x, &camera->x));
 	
 	// close enough ?
